@@ -1,0 +1,24 @@
+@import "../../Color.module.scss";
+
+.container {
+  height: 100vh;
+  background: linear-gradient(
+    -90deg,
+    $primaryGradientColor,
+    $secondaryGradientColor
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.row {
+  width: 100vw;
+}
+
+.logoBox {
+  text-align: center;
+  margin-bottom: 40px;
+  color: white;
+}

@@ -1,0 +1,14 @@
+@import "../../Color.module.scss";
+
+.primaryButton {
+  background: linear-gradient(
+    -90deg,
+    $primaryGradientColor,
+    $secondaryGradientColor
+  );
+  border: 0;
+}
+
+.fullWidth {
+  width: 100%;
+}
