@@ -1,14 +1,33 @@
-@import "../../Color.module.scss";
+@import '../../Color.module.scss';
 
 .primaryButton {
-  background: linear-gradient(
-    -90deg,
-    $primaryGradientColor,
-    $secondaryGradientColor
-  );
-  border: 0;
+    background: linear-gradient(-90deg, $primaryGradientColor, $secondaryGradientColor);
+    border: 0;
+}
+
+.primaryButtonInverse {
+    color: $primaryColor;
+    background: none;
+    border: $primaryColor 1px solid;
+}
+
+.primaryButtonInverse:hover {
+    color: white;
+    background: linear-gradient(-90deg, $primaryGradientColor, $secondaryGradientColor);
+    border: 0;
+}
+
+.primaryButton:hover,
+.secondaryButton:hover,
+.primaryButtonInverse:hover {
+    transform: scale(1.03);
+    transition: transform 0.2s;
 }
 
 .fullWidth {
-  width: 100%;
+    width: 100%;
+}
+
+.floatRight {
+    float: right;
 }
