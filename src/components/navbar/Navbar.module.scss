@@ -1,0 +1,17 @@
+@import '../../Color.module.scss';
+
+.primaryNavbar {
+    background: linear-gradient(-90deg, $primaryGradientColor, $secondaryGradientColor);
+}
+
+.navContainer {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+}
+
+@media screen and (max-width: 576px) {
+    .navContainer {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+}

@@ -1,24 +1,45 @@
-@import "../../Color.module.scss";
+@import '../../Color.module.scss';
 
 .container {
-  height: 100vh;
-  background: linear-gradient(
-    -90deg,
-    $primaryGradientColor,
-    $secondaryGradientColor
-  );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+    height: 100vh;
+    background: linear-gradient(-90deg, $primaryGradientColor, $secondaryGradientColor);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .row {
-  width: 100vw;
+    width: 100vw;
 }
 
 .logoBox {
-  text-align: center;
-  margin-bottom: 40px;
-  color: white;
+    text-align: center;
+    margin-bottom: 40px;
+    color: white;
+}
+
+.mainContainer {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.layoutBody {
+    flex-grow: 1;
+}
+
+.titleBar {
+    padding: 0;
+    padding-top: 5px;
+    padding-bottom: 8px;
+    font-size: 1.2rem;
+    background-color: #e8e3f0;
+    text-transform: capitalize;
+    margin-bottom: 15px;
+}
+
+.titleBar .buttonSpace {
+    text-align: right;
 }
