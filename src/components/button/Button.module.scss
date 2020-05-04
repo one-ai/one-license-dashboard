@@ -17,9 +17,7 @@
     border: 0;
 }
 
-.primaryButton:hover,
-.secondaryButton:hover,
-.primaryButtonInverse:hover {
+.hoverEffect:hover {
     transform: scale(1.03);
     transition: transform 0.2s;
 }

@@ -43,16 +43,21 @@ export const Layout: FunctionComponent<Props> = props => {
     const title = props.title;
     const successMessage = props.successMessage;
     const errorMessage = props.errorMessage;
-    const successAlert = successMessage ? <Alert variant="success">{successMessage}</Alert> : undefined;
-    const errorAlert = errorMessage ? <Alert variant="danger">{errorMessage}</Alert> : undefined;
     const primaryButton = props.primaryButton;
+
+    const alert = successMessage ? (
+        <Alert variant="success">{successMessage}</Alert>
+    ) : errorMessage ? (
+        <Alert variant="danger">{errorMessage}</Alert>
+    ) : undefined;
+
     return (
         <Container className={styles.mainContainer} fluid>
             <div className={styles.layoutBody}>
                 <PrimaryNavbar />
                 <TitleBar title={title} primaryButton={primaryButton} />
                 <Container className={styles.navContainer}>
-                    {successAlert ? successMessage : errorAlert ? errorAlert : undefined}
+                    {alert}
                     <Row className={styles.simpleRow}>
                         <Col className={styles.children}>{props.children}</Col>
                     </Row>

@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 import styles from './Button.module.scss';
 
 interface Props {
@@ -7,6 +7,8 @@ interface Props {
     right?: boolean;
     small?: boolean;
     onClick?: () => void;
+    processing?: boolean;
+    hoverEffect?: boolean;
 }
 
 export const PrimaryButton: FunctionComponent<Props> = props => {
@@ -14,15 +16,23 @@ export const PrimaryButton: FunctionComponent<Props> = props => {
     const right = props.right;
     const small = props.small;
     const onClick = props.onClick;
+    const processing = props.processing;
+    const hoverEffect = props.hoverEffect;
+    const spinner = processing ? <Spinner animation="grow" size="sm" /> : undefined;
+
     return (
         <Button
-            className={[styles.primaryButton, fullWidth ? styles.fullWidth : '', right ? styles.floatRight : ''].join(
-                ' ',
-            )}
+            className={[
+                styles.primaryButton,
+                fullWidth ? styles.fullWidth : undefined,
+                right ? styles.floatRight : undefined,
+                hoverEffect ? styles.hoverEffect : undefined,
+            ].join(' ')}
             size={small ? 'sm' : undefined}
             onClick={onClick}
+            disabled={processing ? true : false}
         >
-            {props.children}
+            {spinner} {props.children}
         </Button>
     );
 };
