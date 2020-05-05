@@ -13,7 +13,7 @@ export const PrimaryNavbar: FunctionComponent = props => {
                     <Nav.Link href="/products" active>
                         Products
                     </Nav.Link>
-                    <Nav.Link href="#pricing">Logout</Nav.Link>
+                    <Nav.Link href="/logout">Logout</Nav.Link>
                 </Nav>
             </Container>
         </Navbar>

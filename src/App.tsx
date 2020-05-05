@@ -6,6 +6,7 @@ import { Login } from './components/login/Login';
 import { Register } from './components/register/Register';
 import { Product } from './components/product/Product';
 import { AddProduct } from './components/product/AddProduct';
+import { Logout } from './components/logout/Logout';
 
 function App() {
     return (
@@ -17,6 +18,9 @@ function App() {
                     </Route>
                     <Route path="/register">
                         <Register />
+                    </Route>
+                    <Route path="/logout">
+                        <Logout />
                     </Route>
                     <Route path="/products/add">
                         <AddProduct />

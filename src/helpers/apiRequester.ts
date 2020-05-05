@@ -103,17 +103,19 @@ export class APIRequester {
             let errorJson: {
                 status: number;
                 title: string;
+                description?: string;
             };
             try {
                 errorJson = JSON.parse(this.responsePlainText) as {
                     status: number;
                     title: string;
+                    description?: string;
                 };
             } catch (err) {
                 // We are confirmed response is not JSON
                 throw new Error(this.responsePlainText);
             }
-            throw new Error(errorJson.title);
+            throw new Error(`${errorJson.title}. ${errorJson.description ? errorJson.description : ''}`);
         } else if (this.STATUS_CODE !== 200)
             // When request is not successful
             throw new Error('Request status code not 200');

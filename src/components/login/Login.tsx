@@ -17,6 +17,7 @@ export const Login: FunctionComponent = props => {
     const [token, setToken] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [fields, setFields] = useState(rawFields);
+    const [processing, setProcessing] = useState(false);
 
     const onChange = (e: React.ChangeEvent<FormControlElement>) => {
         e.preventDefault();
@@ -29,11 +30,13 @@ export const Login: FunctionComponent = props => {
     const validateForm = async () => {
         Object.keys(fields).map(fieldId => {
             if (!fields[fieldId]) throw new Error(`Please enter a valid ${fieldId}`);
+            return undefined;
         });
     };
 
     const onClick = async () => {
         try {
+            setProcessing(true);
             setErrorMessage('');
             await validateForm();
             const submitUrl = `${process.env.REACT_APP_API_GATEWAY}/api/v1/login/basic`;
@@ -43,9 +46,10 @@ export const Login: FunctionComponent = props => {
             const token = resJson.token;
             store.set('token', resJson.token);
             setToken(token);
+            setProcessing(false);
         } catch (err) {
+            setProcessing(false);
             console.log(err);
-            if (err.title) return setErrorMessage(err.title);
             return setErrorMessage(err.message);
         }
     };
@@ -83,7 +87,7 @@ export const Login: FunctionComponent = props => {
                         />
                     </Form.Group>
                     <Form.Group>
-                        <PrimaryButton onClick={onClick} fullWidth={true}>
+                        <PrimaryButton onClick={onClick} fullWidth={true} processing={processing}>
                             Login
                         </PrimaryButton>
                     </Form.Group>

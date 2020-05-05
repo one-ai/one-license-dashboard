@@ -16,7 +16,7 @@ export const AddProduct: FunctionComponent = props => {
             },
             'product-meta-data': {
                 name: 'Product Meta Data',
-                description: 'These are optional data that complement your product data.',
+                description: 'These are optional fields that complement your product data.',
             },
         },
         fields: {
@@ -40,6 +40,7 @@ export const AddProduct: FunctionComponent = props => {
                 required: false,
                 sectionId: 'product-meta-data',
                 value: '',
+                disabled: true,
             },
         },
         submitUrl,

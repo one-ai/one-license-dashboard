@@ -13,6 +13,7 @@ interface Props {
     };
     successMessage?: string;
     errorMessage?: string;
+    initialized?: boolean;
 }
 
 export const TitleBar: FunctionComponent<Props> = props => {

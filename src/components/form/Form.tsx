@@ -21,6 +21,7 @@ export interface FormProps {
             required: boolean;
             sectionId: string;
             value: any;
+            disabled?: boolean;
         };
     };
     submitUrl: string;
@@ -48,6 +49,7 @@ export const PrimaryForm: FunctionComponent<FormProps> = props => {
         Object.keys(fields).map(fieldId => {
             if (!fields[fieldId].value && fields[fieldId].required)
                 throw new Error(`Please enter a valid ${fields[fieldId].name}`);
+            return undefined;
         });
     };
 
@@ -106,6 +108,7 @@ export const PrimaryForm: FunctionComponent<FormProps> = props => {
                                                     type={fields[fieldId].type}
                                                     value={fields[fieldId].value}
                                                     onChange={e => onChange(e)}
+                                                    disabled={fields[fieldId].disabled}
                                                 />
                                             </Form.Group>
                                         </Form>
