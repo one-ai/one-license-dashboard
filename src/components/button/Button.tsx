@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, ReactNode } from 'react';
 import { Button, Spinner } from 'react-bootstrap';
 import styles from './Button.module.scss';
 
@@ -9,9 +9,10 @@ interface Props {
     onClick?: () => void;
     processing?: boolean;
     hoverEffect?: boolean;
+    children?: ReactNode;
 }
 
-export const PrimaryButton: FunctionComponent<Props> = props => {
+export const PrimaryButton: FunctionComponent<Props> = (props: Props) => {
     const fullWidth = props.fullWidth;
     const right = props.right;
     const small = props.small;
@@ -37,7 +38,7 @@ export const PrimaryButton: FunctionComponent<Props> = props => {
     );
 };
 
-export const PrimaryButtonInverse: FunctionComponent<Props> = props => {
+export const PrimaryButtonInverse: FunctionComponent<Props> = (props: Props) => {
     const fullWidth = props.fullWidth;
     const right = props.right;
     const small = props.small;
@@ -55,7 +56,7 @@ export const PrimaryButtonInverse: FunctionComponent<Props> = props => {
     );
 };
 
-export const SecondaryInverseButton: FunctionComponent<Props> = props => {
+export const SecondaryInverseButton: FunctionComponent<Props> = (props: Props) => {
     const fullWidth = props.fullWidth;
     const right = props.right;
     const small = props.small;

@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, ReactNode } from 'react';
 import { Container, Row, Col, Alert } from 'react-bootstrap';
 import styles from './Layout.module.scss';
 import { PrimaryNavbar } from '../navbar/Navbar';
@@ -14,9 +14,10 @@ interface Props {
     successMessage?: string;
     errorMessage?: string;
     initialized?: boolean;
+    children?: ReactNode;
 }
 
-export const TitleBar: FunctionComponent<Props> = props => {
+export const TitleBar: FunctionComponent<Props> = (props: Props) => {
     const title = props.title;
     const primaryButton = props.primaryButton;
     return (
@@ -40,7 +41,7 @@ export const TitleBar: FunctionComponent<Props> = props => {
     );
 };
 
-export const Layout: FunctionComponent<Props> = props => {
+export const Layout: FunctionComponent<Props> = (props: Props) => {
     const title = props.title;
     const successMessage = props.successMessage;
     const errorMessage = props.errorMessage;

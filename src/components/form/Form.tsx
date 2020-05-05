@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, ChangeEvent } from 'react';
+import React, { FunctionComponent, useState, ReactNode } from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
 import styles from './Form.module.scss';
 import { PrimaryButton } from '../button/Button';
@@ -20,16 +20,17 @@ export interface FormProps {
             type: string;
             required: boolean;
             sectionId: string;
-            value: any;
+            value: string | number;
             disabled?: boolean;
         };
     };
     submitUrl: string;
     onSuccess: (state: number) => void;
     onError: (message: string) => void;
+    children?: ReactNode;
 }
 
-export const PrimaryForm: FunctionComponent<FormProps> = props => {
+export const PrimaryForm: FunctionComponent<FormProps> = (props: FormProps) => {
     const [fields, setFields] = useState(props.fields);
     const sections = props.sections;
     const onSuccess = props.onSuccess;
@@ -37,7 +38,7 @@ export const PrimaryForm: FunctionComponent<FormProps> = props => {
     const [processing, setProcessing] = useState(false);
     const submitUrl = props.submitUrl;
 
-    const onChange = (e: React.ChangeEvent<FormControlElement>) => {
+    const onChange = (e: React.ChangeEvent<FormControlElement>): void => {
         e.preventDefault();
         setFields({
             ...fields,
@@ -45,7 +46,7 @@ export const PrimaryForm: FunctionComponent<FormProps> = props => {
         });
     };
 
-    const validateForm = async () => {
+    const validateForm = (): void => {
         Object.keys(fields).map(fieldId => {
             if (!fields[fieldId].value && fields[fieldId].required)
                 throw new Error(`Please enter a valid ${fields[fieldId].name}`);
@@ -53,7 +54,7 @@ export const PrimaryForm: FunctionComponent<FormProps> = props => {
         });
     };
 
-    const onClick = async () => {
+    const onClick = async (): Promise<void> => {
         try {
             setProcessing(true);
             onSuccess(0);

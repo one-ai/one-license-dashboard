@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, ReactNode } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import styles from './List.module.scss';
 import { PrimaryButtonInverse, SecondaryInverseButton } from '../button/Button';
@@ -17,9 +17,10 @@ interface Props {
             link: string;
         };
     };
+    children?: ReactNode;
 }
 
-export const List: FunctionComponent<Props> = props => {
+export const List: FunctionComponent<Props> = (props: Props) => {
     const ids = props.ids;
     // const keysConfig = props.keys;
     const itemsConfig = props.items;
