@@ -1,10 +1,14 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, ReactNode } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import styles from './Layout.module.scss';
 import config from '../../config';
 import { Footer } from '../footer/Footer';
 
-export const FullLayout: FunctionComponent = props => {
+interface Props {
+    children?: ReactNode;
+}
+
+export const FullLayout: FunctionComponent = (props: Props) => {
     return (
         <Container className={styles.container} fluid>
             <Row className={styles.row}>

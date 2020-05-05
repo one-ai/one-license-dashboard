@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 // import logo from "./logo.svg";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -8,7 +8,7 @@ import { Product } from './components/product/Product';
 import { AddProduct } from './components/product/AddProduct';
 import { Logout } from './components/logout/Logout';
 
-function App() {
+export const App: FunctionComponent = () => {
     return (
         <div>
             <Router>
@@ -32,6 +32,6 @@ function App() {
             </Router>
         </div>
     );
-}
+};
 
 export default App;

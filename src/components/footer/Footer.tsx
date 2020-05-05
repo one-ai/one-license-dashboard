@@ -1,13 +1,14 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, ReactNode } from 'react';
 import styles from './Footer.module.scss';
 import config from '../../config';
 
 interface Props {
     bottomFix?: boolean;
     inverse?: boolean;
+    children?: ReactNode;
 }
 
-export const Footer: FunctionComponent<Props> = props => {
+export const Footer: FunctionComponent<Props> = (props: Props) => {
     const bottomFix = props.bottomFix;
     const inverse = props.inverse;
     return (
