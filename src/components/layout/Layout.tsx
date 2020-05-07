@@ -3,13 +3,14 @@ import { Container, Row, Col, Alert } from 'react-bootstrap';
 import styles from './Layout.module.scss';
 import { PrimaryNavbar } from '../navbar/Navbar';
 import { Footer } from '../footer/Footer';
-import { PrimaryButton } from '../button/Button';
+import { PrimaryButton, BUTTON_TYPES } from '../button/Button';
 
 interface Props {
     title: string;
     primaryButton?: {
         name: string;
         onClick: () => void;
+        type?: BUTTON_TYPES;
     };
     successMessage?: string;
     errorMessage?: string;
@@ -20,6 +21,7 @@ interface Props {
 export const TitleBar: FunctionComponent<Props> = (props: Props) => {
     const title = props.title;
     const primaryButton = props.primaryButton;
+    const type = props.primaryButton?.type;
     return (
         <Container className={styles.titleBar} fluid>
             <Container>
@@ -29,7 +31,7 @@ export const TitleBar: FunctionComponent<Props> = (props: Props) => {
                     </Col>
                     <Col className={styles.buttonSpace} md={6} xs={12}>
                         {primaryButton ? (
-                            <PrimaryButton onClick={primaryButton.onClick} small>
+                            <PrimaryButton onClick={primaryButton.onClick} small type={type}>
                                 {' '}
                                 {primaryButton.name}
                             </PrimaryButton>

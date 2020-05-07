@@ -4,9 +4,16 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Login } from './components/login/Login';
 import { Register } from './components/register/Register';
-import { Product } from './components/product/Product';
+import { ViewProductList } from './components/product/ViewProductList';
 import { AddProduct } from './components/product/AddProduct';
+import { ViewProduct } from './components/product/ViewProduct';
 import { Logout } from './components/logout/Logout';
+import { ViewVersionList } from './components/version/ViewVersionList';
+import { AddVersion } from './components/version/AddVersion';
+import { ViewVersion } from './components/version/ViewVersion';
+import { ViewLicenseList } from './components/license/ViewLicenseList';
+import { AddLicense } from './components/license/AddLicense';
+import { ViewLicense } from './components/license/ViewLicense';
 import store from 'store';
 
 export const App: FunctionComponent = () => {
@@ -27,8 +34,29 @@ export const App: FunctionComponent = () => {
                     <Route path="/products/add">
                         <AddProduct />
                     </Route>
+                    <Route path="/products/:productId/versions/add">
+                        <AddVersion />
+                    </Route>
+                    <Route path="/products/:productId/versions/:versionId/licenses/add">
+                        <AddLicense />
+                    </Route>
+                    <Route path="/products/:productId/versions/:versionId/licenses/:licenseId">
+                        <ViewLicense />
+                    </Route>
+                    <Route path="/products/:productId/versions/:versionId/licenses">
+                        <ViewLicenseList />
+                    </Route>
+                    <Route path="/products/:productId/versions/:versionId">
+                        <ViewVersion />
+                    </Route>
+                    <Route path="/products/:productId/versions">
+                        <ViewVersionList />
+                    </Route>
+                    <Route path="/products/:productId">
+                        <ViewProduct />
+                    </Route>
                     <Route path="/products">
-                        <Product />
+                        <ViewProductList />
                     </Route>
                     <Route path="/">{token ? <Redirect to="/products" /> : <Redirect to="/login" />}</Route>
                 </Switch>

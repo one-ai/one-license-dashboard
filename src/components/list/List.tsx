@@ -1,46 +1,63 @@
 import React, { FunctionComponent, ReactNode } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import styles from './List.module.scss';
-import { PrimaryButtonInverse, SecondaryInverseButton } from '../button/Button';
+import { PrimaryButton, BUTTON_TYPES } from '../button/Button';
 
-interface Props {
-    ids: string[];
-    keys: string[];
-    items: string[][];
+export interface ListItem {
+    id: string;
+    name: string;
+    [key: string]: any;
     buttons?: {
-        primaryButton?: {
-            name: string;
-            link: string;
-        };
-        secondaryButton?: {
+        [type: string]: {
             name: string;
             link: string;
         };
     };
-    children?: ReactNode;
 }
 
-export const List: FunctionComponent<Props> = (props: Props) => {
-    const ids = props.ids;
-    // const keysConfig = props.keys;
-    const itemsConfig = props.items;
-    const primaryButtonConfig = props.buttons?.primaryButton;
-    const secondaryButtonConfig = props.buttons?.secondaryButton;
+export interface ListProps {
+    items?: ListItem[];
+    children?: ReactNode;
+    entityName: string;
+}
 
-    const itemsRows = itemsConfig.map((itemConfig, i) => {
+export const List: FunctionComponent<ListProps> = (props: ListProps) => {
+    const items = props.items;
+    const entityName = props.entityName;
+
+    if (!items || !items?.length)
         return (
-            <Row className={styles.listItem} key={`${ids[i]}`}>
-                {itemConfig.map((data, j) => {
-                    return <Col key={`${ids[i]}${j}`}>{data}</Col>;
-                })}
+            <Row>
+                <Col className="text-center mt-5">
+                    You do not have any {entityName}s. Please add {entityName}s to view them here.
+                </Col>
+            </Row>
+        );
+
+    const itemsRows = items.map(item => {
+        return (
+            <Row className={styles.listItem} key={item.id}>
+                <Col key={`${item.id}-name`}>{item.name}</Col>
                 <Col className={styles.buttonSpace}>
-                    {secondaryButtonConfig ? (
-                        <SecondaryInverseButton small>{secondaryButtonConfig.name}</SecondaryInverseButton>
+                    {item.buttons && item.buttons.secondaryButton ? (
+                        <PrimaryButton
+                            small
+                            redirectLink={item.buttons.secondaryButton.link}
+                            type={BUTTON_TYPES.SECONDARY_INVERSE}
+                        >
+                            {item.buttons.secondaryButton.name}
+                        </PrimaryButton>
                     ) : (
                         ''
                     )}{' '}
-                    {primaryButtonConfig ? (
-                        <PrimaryButtonInverse small>{primaryButtonConfig.name}</PrimaryButtonInverse>
+                    {item.buttons && item.buttons.primaryButton ? (
+                        <PrimaryButton
+                            small
+                            redirectLink={item.buttons.primaryButton.link}
+                            type={BUTTON_TYPES.PRIMARY_INVERSE}
+                        >
+                            {item.buttons.primaryButton.name}
+                        </PrimaryButton>
                     ) : (
                         ''
                     )}
