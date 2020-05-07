@@ -10,9 +10,7 @@ export const PrimaryNavbar: FunctionComponent = props => {
                 <Navbar.Brand>{config.siteTitle}</Navbar.Brand>
                 <div className="mr-auto"></div>
                 <Nav>
-                    <Nav.Link href="/products" active>
-                        Products
-                    </Nav.Link>
+                    <Nav.Link href="/products">Home</Nav.Link>
                     <Nav.Link href="/logout">Logout</Nav.Link>
                 </Nav>
             </Container>

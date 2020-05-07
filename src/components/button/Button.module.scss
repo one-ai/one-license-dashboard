@@ -1,20 +1,61 @@
 @import '../../Color.module.scss';
 
-.primaryButton {
+.primary {
     background: linear-gradient(-90deg, $primaryGradientColor, $secondaryGradientColor);
     border: 0;
 }
 
-.primaryButtonInverse {
+.primaryInverse {
     color: $primaryColor;
-    background: none;
+    background: transparent;
     border: $primaryColor 1px solid;
 }
 
-.primaryButtonInverse:hover {
+.primaryInverse:hover {
     color: white;
     background: linear-gradient(-90deg, $primaryGradientColor, $secondaryGradientColor);
     border: 0;
+}
+
+.secondary {
+    background-color: grey;
+    color: white;
+    border: 1px solid grey;
+}
+
+.secondaryInverse {
+    background-color: transparent;
+    color: grey;
+    border: 1px solid grey;
+}
+
+.secondaryInverse:hover {
+    background-color: grey;
+    color: white;
+    border: 1px solid grey;
+}
+
+.danger {
+    background-color: #c0392b;
+    border: #c0392b 1px solid;
+}
+
+.danger:hover {
+    color: #c0392b;
+    background: transparent;
+    border: #c0392b 1px solid;
+}
+
+.dangerInverse {
+    color: #c0392b;
+    background: transparent;
+    border: #c0392b 1px solid;
+}
+
+.dangerInverse:hover {
+    color: white;
+    background-color: #c0392b;
+    border: #c0392b 1px solid;
 }
 
 .hoverEffect:hover {

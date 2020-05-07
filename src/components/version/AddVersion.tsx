@@ -1,22 +1,24 @@
 import React, { FunctionComponent, useState } from 'react';
 import { Layout } from '../layout/Layout';
 import { PrimaryForm, FormProps } from '../form/Form';
+import { useParams } from 'react-router-dom';
 
-export const AddProduct: FunctionComponent = props => {
-    const successMessage = 'Your product has been created successfully. You can view it on the products page.';
+export const AddVersion: FunctionComponent = props => {
+    const successMessage = 'Your version has been created successfully. You can view it on the versions page.';
     const [success, setSuccess] = useState(0);
     const [errorMessage, setErrorMessage] = useState('');
-    const submitUrl = `${process.env.REACT_APP_API_GATEWAY}/api/v1/products`;
+    const { productId } = useParams();
+    const submitUrl = `${process.env.REACT_APP_API_GATEWAY}/api/v1/products/${productId}/versions`;
 
     const formProps: FormProps = {
         sections: {
-            'product-data': {
-                name: 'Product Data',
-                description: 'These are required fields that perfectly describe your product',
+            'version-data': {
+                name: 'Version Data',
+                description: 'These are required fields that perfectly describe your version',
             },
-            'product-meta-data': {
-                name: 'Product Meta Data',
-                description: 'These are optional fields that complement your product data.',
+            'version-meta-data': {
+                name: 'Version Meta Data',
+                description: 'These are optional fields that complement your version data.',
             },
         },
         fields: {
@@ -24,21 +26,21 @@ export const AddProduct: FunctionComponent = props => {
                 name: 'Name',
                 type: 'text',
                 required: true,
-                sectionId: 'product-data',
+                sectionId: 'version-data',
                 value: '',
             },
             description: {
                 name: 'Description',
                 type: 'textarea',
                 required: true,
-                sectionId: 'product-data',
+                sectionId: 'version-data',
                 value: '',
             },
             metadata: {
                 name: 'Metadata',
                 type: 'text',
                 required: false,
-                sectionId: 'product-meta-data',
+                sectionId: 'version-meta-data',
                 value: '',
                 disabled: true,
             },
@@ -50,7 +52,7 @@ export const AddProduct: FunctionComponent = props => {
 
     return (
         <Layout
-            title="Add New Product"
+            title="Add New Version"
             successMessage={success ? successMessage : ''}
             errorMessage={errorMessage ? errorMessage : ''}
         >
@@ -59,4 +61,4 @@ export const AddProduct: FunctionComponent = props => {
     );
 };
 
-export default AddProduct;
+export default AddVersion;
