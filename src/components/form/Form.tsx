@@ -33,13 +33,14 @@ export interface FormProps {
         [id: string]: Field;
     };
     submitUrl: string;
-    requestType?: REQUEST_METHODS;
-    onSuccess: (state: number) => void;
+    requestType: REQUEST_METHODS;
+    onSuccess: (message: string) => void;
     onError: (message: string) => void;
     children?: ReactNode;
-    submitButton?: {
+    submitButton: {
         name: string;
         type: BUTTON_TYPES;
+        successMessage: string;
     };
 }
 
@@ -53,6 +54,7 @@ export const PrimaryForm: FunctionComponent<FormProps> = (props: FormProps) => {
     const submitButtonText = props.submitButton ? props.submitButton.name : 'Submit';
     const submitButtonType = props.submitButton ? props.submitButton.type : BUTTON_TYPES.PRIMARY;
     const requestType = props.requestType ? props.requestType : REQUEST_METHODS.POST;
+    const successMessage = props.submitButton.successMessage;
 
     const onChange = (e: React.ChangeEvent<FormControlElement>): void => {
         e.preventDefault();
@@ -70,17 +72,34 @@ export const PrimaryForm: FunctionComponent<FormProps> = (props: FormProps) => {
         });
     };
 
+    const needInRequestBody = (fieldId: string): boolean => {
+        console.log('Field id = ' + fieldId);
+        const dependsOnOtherFields = fields[fieldId].dependsOn ? true : false;
+        console.log('dependsOnOtherFields = ' + dependsOnOtherFields);
+        if (!dependsOnOtherFields) return true;
+        const dependeeField = fields[fieldId].dependsOn?.id;
+        console.log('dependeeField = ' + dependeeField);
+        const requiredValues = fields[fieldId].dependsOn?.targetValues;
+        console.log('requiredValues = ' + requiredValues);
+        const dependeeValue = fields[dependeeField!].value;
+        console.log('dependeeValue = ' + dependeeValue);
+        console.log(requiredValues!.indexOf(dependeeValue) > -1);
+        if (requiredValues!.indexOf(dependeeValue) > -1) return true;
+        else return false;
+    };
+
     const onClick = async (): Promise<void> => {
         try {
             setProcessing(true);
-            onSuccess(0);
+            onSuccess('');
             onError('');
 
             await validateForm();
             const body: { [key: string]: any } = {};
-            Object.keys(fields).map(fieldId =>
-                fields[fieldId].value ? (body[fieldId] = fields[fieldId].value) : undefined,
-            );
+            Object.keys(fields).map(fieldId => {
+                if (fields[fieldId].value && needInRequestBody(fieldId)) body[fieldId] = fields[fieldId].value;
+                return undefined;
+            });
             Object.keys(fields).map(fieldId => (fields[fieldId].send === false ? delete body[fieldId] : undefined));
             const token = store.get('token');
             const req = new APIRequester({ url: submitUrl })
@@ -95,11 +114,20 @@ export const PrimaryForm: FunctionComponent<FormProps> = (props: FormProps) => {
 
             console.log(resJson);
 
-            onSuccess(1);
+            onSuccess(successMessage ? successMessage : 'Success!');
             setProcessing(false);
+
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth',
+            });
         } catch (err) {
             setProcessing(false);
             console.log(err);
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth',
+            });
             if (err.title) return onError(err.title);
             return onError(err.message);
         }
@@ -125,7 +153,7 @@ export const PrimaryForm: FunctionComponent<FormProps> = (props: FormProps) => {
             return (
                 <>
                     <Form.Label>{field.name}</Form.Label>
-                    <Form.Control as="select" name={fieldId} onChange={e => onChange(e)}>
+                    <Form.Control as="select" name={fieldId} onChange={e => onChange(e)} value={field.value}>
                         {field.options!.map(option => (
                             <option value={option.id} key={option.id}>
                                 {option.name}
@@ -141,7 +169,7 @@ export const PrimaryForm: FunctionComponent<FormProps> = (props: FormProps) => {
         <>
             {Object.keys(sections).map(sectionId => {
                 return (
-                    <>
+                    <div key={sectionId}>
                         <Row>
                             <Col md={6} xs={12}>
                                 <div className={styles.sectionName}>{sections[sectionId].name}</div>
@@ -150,7 +178,7 @@ export const PrimaryForm: FunctionComponent<FormProps> = (props: FormProps) => {
                             <Col md={6} xs={12}>
                                 {Object.keys(fields).map(fieldId => {
                                     return fields[fieldId].sectionId === sectionId ? (
-                                        <Form>
+                                        <Form key={`${sectionId}-${fieldId}`}>
                                             <Form.Group>{getFormField(fieldId, fields[fieldId])}</Form.Group>
                                         </Form>
                                     ) : undefined;
@@ -158,7 +186,7 @@ export const PrimaryForm: FunctionComponent<FormProps> = (props: FormProps) => {
                             </Col>
                         </Row>
                         <hr />
-                    </>
+                    </div>
                 );
             })}
             <Row>

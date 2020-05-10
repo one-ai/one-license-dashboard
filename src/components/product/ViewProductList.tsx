@@ -5,6 +5,7 @@ import { List } from '../list/List';
 import { APIRequester, REQUEST_METHODS } from '../../helpers/apiRequester';
 import store from 'store';
 import { ListItem, ListProps } from '../list/List';
+import { Spinner, Col, Row } from 'react-bootstrap';
 
 interface ResponseProduct {
     _id: string;
@@ -87,11 +88,27 @@ export const ViewProductList: FunctionComponent = props => {
 
     if (redirectToAdd) return <Redirect to="/products/add" />;
 
-    return (
-        <Layout title="Product List" primaryButton={addProductButton} initialized={initialized} errorMessage={error}>
-            <List {...productList} />
-        </Layout>
-    );
+    if (!initialized)
+        return (
+            <Layout title="License List" initialized={initialized} errorMessage={error}>
+                <Row>
+                    <Col className="text-center">
+                        <Spinner animation="grow" />
+                    </Col>
+                </Row>
+            </Layout>
+        );
+    else
+        return (
+            <Layout
+                title="Product List"
+                primaryButton={addProductButton}
+                initialized={initialized}
+                errorMessage={error}
+            >
+                <List {...productList} />
+            </Layout>
+        );
 };
 
 export default ViewProductList;

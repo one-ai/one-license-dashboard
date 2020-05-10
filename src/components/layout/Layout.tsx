@@ -12,6 +12,11 @@ interface Props {
         onClick: () => void;
         type?: BUTTON_TYPES;
     };
+    secondaryButton?: {
+        name: string;
+        onClick: () => void;
+        type?: BUTTON_TYPES;
+    };
     successMessage?: string;
     errorMessage?: string;
     initialized?: boolean;
@@ -21,7 +26,7 @@ interface Props {
 export const TitleBar: FunctionComponent<Props> = (props: Props) => {
     const title = props.title;
     const primaryButton = props.primaryButton;
-    const type = props.primaryButton?.type;
+    const secondaryButton = props.secondaryButton;
     return (
         <Container className={styles.titleBar} fluid>
             <Container>
@@ -30,8 +35,14 @@ export const TitleBar: FunctionComponent<Props> = (props: Props) => {
                         <div>{title}</div>{' '}
                     </Col>
                     <Col className={styles.buttonSpace} md={6} xs={12}>
+                        {secondaryButton ? (
+                            <PrimaryButton onClick={secondaryButton.onClick} small type={secondaryButton.type}>
+                                {' '}
+                                {secondaryButton.name}
+                            </PrimaryButton>
+                        ) : undefined}{' '}
                         {primaryButton ? (
-                            <PrimaryButton onClick={primaryButton.onClick} small type={type}>
+                            <PrimaryButton onClick={primaryButton.onClick} small type={primaryButton.type}>
                                 {' '}
                                 {primaryButton.name}
                             </PrimaryButton>
@@ -48,6 +59,7 @@ export const Layout: FunctionComponent<Props> = (props: Props) => {
     const successMessage = props.successMessage;
     const errorMessage = props.errorMessage;
     const primaryButton = props.primaryButton;
+    const secondaryButton = props.secondaryButton;
 
     const alert = successMessage ? (
         <Alert variant="success">{successMessage}</Alert>
@@ -59,7 +71,7 @@ export const Layout: FunctionComponent<Props> = (props: Props) => {
         <Container className={styles.mainContainer} fluid>
             <div className={styles.layoutBody}>
                 <PrimaryNavbar />
-                <TitleBar title={title} primaryButton={primaryButton} />
+                <TitleBar title={title} primaryButton={primaryButton} secondaryButton={secondaryButton} />
                 <Container className={styles.navContainer}>
                     {alert}
                     <Row className={styles.simpleRow}>
