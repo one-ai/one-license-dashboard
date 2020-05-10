@@ -124,10 +124,11 @@ export const ViewProduct: FunctionComponent = props => {
             submitUrl: `${process.env.REACT_APP_API_GATEWAY}/api/v1/products/${productId}`,
             requestType: REQUEST_METHODS.PUT,
             onError: (message: string) => setErrorMessage(message),
-            onSuccess: (state: number) => setSuccessMessage('Your product has been updated.'),
+            onSuccess: (message: string) => setSuccessMessage(message),
             submitButton: {
                 name: 'Update',
                 type: BUTTON_TYPES.PRIMARY_INVERSE,
+                successMessage: 'Your product has been updated successfully.',
             },
         };
         setFormProps(formProps);

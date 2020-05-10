@@ -5,6 +5,7 @@ import { List } from '../list/List';
 import { APIRequester, REQUEST_METHODS } from '../../helpers/apiRequester';
 import store from 'store';
 import { ListItem, ListProps } from '../list/List';
+import { Spinner, Col, Row } from 'react-bootstrap';
 
 interface ResponseVersion {
     _id: string;
@@ -88,11 +89,27 @@ export const ViewVersionList: FunctionComponent = props => {
 
     if (redirectToAdd) return <Redirect to={`/products/${productId}/versions/add`} />;
 
-    return (
-        <Layout title="Version List" primaryButton={addVersionButton} initialized={initialized} errorMessage={error}>
-            <List {...versionList} />
-        </Layout>
-    );
+    if (!initialized)
+        return (
+            <Layout title="License List" initialized={initialized} errorMessage={error}>
+                <Row>
+                    <Col className="text-center">
+                        <Spinner animation="grow" />
+                    </Col>
+                </Row>
+            </Layout>
+        );
+    else
+        return (
+            <Layout
+                title="Version List"
+                primaryButton={addVersionButton}
+                initialized={initialized}
+                errorMessage={error}
+            >
+                <List {...versionList} />
+            </Layout>
+        );
 };
 
 export default ViewVersionList;

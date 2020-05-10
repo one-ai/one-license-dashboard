@@ -2,10 +2,11 @@ import React, { FunctionComponent, useState } from 'react';
 import { Layout } from '../layout/Layout';
 import { PrimaryForm, FormProps } from '../form/Form';
 import { useParams } from 'react-router-dom';
+import { REQUEST_METHODS } from '../../helpers/apiRequester';
+import { BUTTON_TYPES } from '../button/Button';
 
 export const AddVersion: FunctionComponent = props => {
-    const successMessage = 'Your version has been created successfully. You can view it on the versions page.';
-    const [success, setSuccess] = useState(0);
+    const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const { productId } = useParams();
     const submitUrl = `${process.env.REACT_APP_API_GATEWAY}/api/v1/products/${productId}/versions`;
@@ -47,13 +48,19 @@ export const AddVersion: FunctionComponent = props => {
         },
         submitUrl,
         onError: (message: string) => setErrorMessage(message),
-        onSuccess: (state: number) => setSuccess(state),
+        onSuccess: (message: string) => setSuccessMessage(message),
+        requestType: REQUEST_METHODS.POST,
+        submitButton: {
+            name: 'Create',
+            type: BUTTON_TYPES.PRIMARY,
+            successMessage: 'Your version has been created successfully',
+        },
     };
 
     return (
         <Layout
             title="Add New Version"
-            successMessage={success ? successMessage : ''}
+            successMessage={successMessage ? successMessage : ''}
             errorMessage={errorMessage ? errorMessage : ''}
         >
             <PrimaryForm {...formProps} />

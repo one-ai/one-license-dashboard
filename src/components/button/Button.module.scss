@@ -3,6 +3,7 @@
 .primary {
     background: linear-gradient(-90deg, $primaryGradientColor, $secondaryGradientColor);
     border: 0;
+    border: $primaryGradientColor 1px solid;
 }
 
 .primaryInverse {

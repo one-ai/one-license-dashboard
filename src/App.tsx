@@ -14,6 +14,7 @@ import { ViewVersion } from './components/version/ViewVersion';
 import { ViewLicenseList } from './components/license/ViewLicenseList';
 import { AddLicense } from './components/license/AddLicense';
 import { ViewLicense } from './components/license/ViewLicense';
+import { ViewLicenseInstructions } from './components/license/ViewLicenseInstructions';
 import store from 'store';
 
 export const App: FunctionComponent = () => {
@@ -39,6 +40,9 @@ export const App: FunctionComponent = () => {
                     </Route>
                     <Route path="/products/:productId/versions/:versionId/licenses/add">
                         <AddLicense />
+                    </Route>
+                    <Route path="/products/:productId/versions/:versionId/licenses/:licenseId/instructions">
+                        <ViewLicenseInstructions />
                     </Route>
                     <Route path="/products/:productId/versions/:versionId/licenses/:licenseId">
                         <ViewLicense />

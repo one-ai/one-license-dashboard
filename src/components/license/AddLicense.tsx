@@ -3,10 +3,12 @@ import { Layout } from '../layout/Layout';
 import { PrimaryForm, FormProps } from '../form/Form';
 import { useParams } from 'react-router-dom';
 import { SYNC_STRATEGY, SYNC_TRIGGER, LICENSE_TYPE } from './ViewLicense';
+import { REQUEST_METHODS } from '../../helpers/apiRequester';
+import { BUTTON_TYPES } from '../button/Button';
 
 export const AddLicense: FunctionComponent = props => {
     const successMessage = 'Your license has been created successfully. You can view it on the licenses page.';
-    const [success, setSuccess] = useState(0);
+    const [success, setSuccess] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const { productId, versionId } = useParams();
     const submitUrl = `${process.env.REACT_APP_API_GATEWAY}/api/v1/products/${productId}/versions/${versionId}/licenses`;
@@ -73,7 +75,7 @@ export const AddLicense: FunctionComponent = props => {
                 },
             },
             expiresAt: {
-                name: 'License valid until (mm//yyyy)',
+                name: 'License valid until (mm/dd/yyyy)',
                 type: 'text',
                 required: false,
                 sectionId: 'license-data',
@@ -124,7 +126,7 @@ export const AddLicense: FunctionComponent = props => {
             syncInterval: {
                 name: 'Sync Interval (seconds)',
                 type: 'number',
-                required: true,
+                required: false,
                 sectionId: 'license-data',
                 value: 0,
                 dependsOn: {
@@ -143,7 +145,13 @@ export const AddLicense: FunctionComponent = props => {
         },
         submitUrl,
         onError: (message: string) => setErrorMessage(message),
-        onSuccess: (state: number) => setSuccess(state),
+        onSuccess: (message: string) => setSuccess(message),
+        requestType: REQUEST_METHODS.POST,
+        submitButton: {
+            name: 'Create',
+            type: BUTTON_TYPES.PRIMARY,
+            successMessage: 'Your licenses has been created successfully',
+        },
     };
 
     return (

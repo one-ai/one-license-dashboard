@@ -19,7 +19,6 @@ interface VersionResponse {
 export const ViewVersion: FunctionComponent = props => {
     const [successMessage, setSuccessMessage] = useState('');
     const [processing, setProcessing] = useState(false);
-    const [success, setSuccess] = useState(0);
     const [errorMessage, setErrorMessage] = useState('');
     const [formProps, setFormProps] = useState({} as FormProps);
     const { productId, versionId } = useParams();
@@ -27,7 +26,6 @@ export const ViewVersion: FunctionComponent = props => {
     const deleteVersion = async () => {
         try {
             setProcessing(true);
-            setSuccess(0);
             setErrorMessage('');
 
             const token = store.get('token');
@@ -44,7 +42,6 @@ export const ViewVersion: FunctionComponent = props => {
             console.log(resJson);
 
             setSuccessMessage('Your version has been deleted successfully.');
-            setSuccess(1);
             setProcessing(false);
         } catch (err) {
             setProcessing(false);
@@ -149,10 +146,11 @@ export const ViewVersion: FunctionComponent = props => {
             submitUrl: `${process.env.REACT_APP_API_GATEWAY}/api/v1/products/${productId}/versions/${versionId}`,
             requestType: REQUEST_METHODS.PUT,
             onError: (message: string) => setErrorMessage(message),
-            onSuccess: (state: number) => setSuccess(state),
+            onSuccess: (message: string) => setSuccessMessage(message),
             submitButton: {
                 name: 'Update',
                 type: BUTTON_TYPES.PRIMARY_INVERSE,
+                successMessage: 'Your version has been updated successfully.',
             },
         };
         setFormProps(formProps);
@@ -190,7 +188,7 @@ export const ViewVersion: FunctionComponent = props => {
     return (
         <Layout
             title={`Version View`}
-            successMessage={success ? successMessage : ''}
+            successMessage={successMessage ? successMessage : ''}
             errorMessage={errorMessage ? errorMessage : ''}
             primaryButton={primaryButton}
         >

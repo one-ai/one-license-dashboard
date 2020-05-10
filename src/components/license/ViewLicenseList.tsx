@@ -5,6 +5,7 @@ import { List } from '../list/List';
 import { APIRequester, REQUEST_METHODS } from '../../helpers/apiRequester';
 import store from 'store';
 import { ListItem, ListProps } from '../list/List';
+import { Spinner, Col, Row } from 'react-bootstrap';
 
 interface ResponseLicense {
     _id: string;
@@ -84,11 +85,27 @@ export const ViewLicenseList: FunctionComponent = props => {
 
     if (redirectToAdd) return <Redirect to={`/products/${productId}/versions/${versionId}/licenses/add`} />;
 
-    return (
-        <Layout title="License List" primaryButton={addLicenseButton} initialized={initialized} errorMessage={error}>
-            <List {...licenseList} />
-        </Layout>
-    );
+    if (!initialized)
+        return (
+            <Layout title="License List" initialized={initialized} errorMessage={error}>
+                <Row>
+                    <Col className="text-center">
+                        <Spinner animation="grow" />
+                    </Col>
+                </Row>
+            </Layout>
+        );
+    else
+        return (
+            <Layout
+                title="License List"
+                primaryButton={addLicenseButton}
+                initialized={initialized}
+                errorMessage={error}
+            >
+                <List {...licenseList} />
+            </Layout>
+        );
 };
 
 export default ViewLicenseList;
