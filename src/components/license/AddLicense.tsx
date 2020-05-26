@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState } from 'react';
 import { Layout } from '../layout/Layout';
 import { PrimaryForm, FormProps } from '../form/Form';
 import { useParams } from 'react-router-dom';
-import { SYNC_STRATEGY, SYNC_TRIGGER, LICENSE_TYPE } from './ViewLicense';
+import { SYNC_STRATEGY, SYNC_TRIGGER, LICENSE_TYPE, CLIENT_TYPE } from './ViewLicense';
 import { REQUEST_METHODS } from '../../helpers/apiRequester';
 import { BUTTON_TYPES } from '../button/Button';
 
@@ -62,6 +62,32 @@ export const AddLicense: FunctionComponent = props => {
                     },
                 ],
                 value: LICENSE_TYPE.NO_OF_API_CALLS,
+            },
+            clientType: {
+                name: 'Client Type',
+                type: 'select',
+                required: true,
+                sectionId: 'license-data',
+                options: [
+                    {
+                        id: CLIENT_TYPE.INDEPENDENT_CLIENT,
+                        name: 'Independent client',
+                        value: CLIENT_TYPE.INDEPENDENT_CLIENT,
+                    },
+                    {
+                        id: CLIENT_TYPE.THIN_CLIENT,
+                        name: 'Thin client',
+                        value: CLIENT_TYPE.THIN_CLIENT,
+                    },
+                ],
+                value: CLIENT_TYPE.INDEPENDENT_CLIENT,
+            },
+            activationDelay: {
+                name: 'Activation Delay (seconds)',
+                type: 'number',
+                required: true,
+                sectionId: 'license-data',
+                value: 0,
             },
             allowedApiCalls: {
                 name: 'API call limit',

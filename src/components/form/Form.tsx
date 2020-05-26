@@ -73,17 +73,11 @@ export const PrimaryForm: FunctionComponent<FormProps> = (props: FormProps) => {
     };
 
     const needInRequestBody = (fieldId: string): boolean => {
-        console.log('Field id = ' + fieldId);
         const dependsOnOtherFields = fields[fieldId].dependsOn ? true : false;
-        console.log('dependsOnOtherFields = ' + dependsOnOtherFields);
         if (!dependsOnOtherFields) return true;
         const dependeeField = fields[fieldId].dependsOn?.id;
-        console.log('dependeeField = ' + dependeeField);
         const requiredValues = fields[fieldId].dependsOn?.targetValues;
-        console.log('requiredValues = ' + requiredValues);
         const dependeeValue = fields[dependeeField!].value;
-        console.log('dependeeValue = ' + dependeeValue);
-        console.log(requiredValues!.indexOf(dependeeValue) > -1);
         if (requiredValues!.indexOf(dependeeValue) > -1) return true;
         else return false;
     };

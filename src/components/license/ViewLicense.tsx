@@ -22,6 +22,11 @@ export enum LICENSE_TYPE {
     TIME_BOUND_AND_API_CALLS = 'TIME_BOUND_AND_API_CALLS',
 }
 
+export enum CLIENT_TYPE {
+    INDEPENDENT_CLIENT = 'INDEPENDENT_CLIENT',
+    THIN_CLIENT = 'THIN_CLIENT',
+}
+
 export interface LicenseResponse {
     _id: string;
     name: string;
@@ -38,6 +43,8 @@ export interface LicenseResponse {
     };
     metadata: any;
     type: LICENSE_TYPE;
+    clientType: CLIENT_TYPE;
+    activationDelay: number;
     syncInterval: number;
     syncTrigger: SYNC_TRIGGER;
     syncStrategy: SYNC_STRATEGY;
@@ -163,6 +170,32 @@ export const ViewLicense: FunctionComponent = props => {
                         },
                     ],
                     value: license.type,
+                },
+                clientType: {
+                    name: 'Client Type',
+                    type: 'select',
+                    required: true,
+                    sectionId: 'license-data',
+                    options: [
+                        {
+                            id: CLIENT_TYPE.INDEPENDENT_CLIENT,
+                            name: 'Independent client',
+                            value: CLIENT_TYPE.INDEPENDENT_CLIENT,
+                        },
+                        {
+                            id: CLIENT_TYPE.THIN_CLIENT,
+                            name: 'Thin client',
+                            value: CLIENT_TYPE.THIN_CLIENT,
+                        },
+                    ],
+                    value: license.clientType,
+                },
+                activationDelay: {
+                    name: 'Activation Delay (seconds)',
+                    type: 'number',
+                    required: true,
+                    sectionId: 'license-data',
+                    value: license.activationDelay,
                 },
                 allowedApiCalls: {
                     name: 'API call limit',
