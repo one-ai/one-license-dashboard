@@ -43,7 +43,6 @@ export interface LicenseResponse {
     };
     metadata: any;
     type: LICENSE_TYPE;
-    clientType: CLIENT_TYPE;
     activationDelay: number;
     syncInterval: number;
     syncTrigger: SYNC_TRIGGER;
@@ -51,6 +50,11 @@ export interface LicenseResponse {
     expiresAt: Date;
     allowedApiCalls: number;
     apiCallCounter: number;
+    activationCounter: number;
+    activationResetDate: string;
+    lastActivation: string;
+    lastSync: string;
+    maxSyncRetries: number;
 }
 
 export const ViewLicense: FunctionComponent = props => {
@@ -103,12 +107,29 @@ export const ViewLicense: FunctionComponent = props => {
         processing: processing,
     };
 
+    const activationResetDate = (resetDate: string, syncInterval: number) => {
+        const resetDateObj = new Date(resetDate);
+        return resetDateObj.setSeconds(resetDateObj.getSeconds() + syncInterval);
+    };
+
     const transformResponse = (license: LicenseResponse) => {
         const formProps: FormProps = {
             sections: {
                 'license-data': {
                     name: 'License Data',
                     description: 'These are required fields that perfectly describe your license',
+                },
+                'license-config': {
+                    name: 'License Configuration',
+                    description: 'These are fields help you create different licensing strategies',
+                },
+                'license-stats': {
+                    name: 'License Statistics',
+                    description: 'Information related to license usage',
+                },
+                'license-timestamp': {
+                    name: 'License Timestamp',
+                    description: 'These readonly fields for reference',
                 },
                 'product-data': {
                     name: 'Product Data',
@@ -151,7 +172,7 @@ export const ViewLicense: FunctionComponent = props => {
                     name: 'Type',
                     type: 'select',
                     required: true,
-                    sectionId: 'license-data',
+                    sectionId: 'license-config',
                     options: [
                         {
                             id: LICENSE_TYPE.NO_OF_API_CALLS,
@@ -171,61 +192,29 @@ export const ViewLicense: FunctionComponent = props => {
                     ],
                     value: license.type,
                 },
-                clientType: {
-                    name: 'Client Type',
-                    type: 'select',
-                    required: true,
-                    sectionId: 'license-data',
-                    options: [
-                        {
-                            id: CLIENT_TYPE.INDEPENDENT_CLIENT,
-                            name: 'Independent client',
-                            value: CLIENT_TYPE.INDEPENDENT_CLIENT,
-                        },
-                        {
-                            id: CLIENT_TYPE.THIN_CLIENT,
-                            name: 'Thin client',
-                            value: CLIENT_TYPE.THIN_CLIENT,
-                        },
-                    ],
-                    value: license.clientType,
-                },
                 activationDelay: {
                     name: 'Activation Delay (seconds)',
                     type: 'number',
                     required: true,
-                    sectionId: 'license-data',
+                    sectionId: 'license-config',
                     value: license.activationDelay,
                 },
                 allowedApiCalls: {
                     name: 'API call limit',
                     type: 'number',
                     required: false,
-                    sectionId: 'license-data',
+                    sectionId: 'license-config',
                     value: license.allowedApiCalls,
                     dependsOn: {
                         id: 'type',
                         targetValues: [LICENSE_TYPE.NO_OF_API_CALLS, LICENSE_TYPE.TIME_BOUND_AND_API_CALLS],
                     },
                 },
-                apiCallCounter: {
-                    name: 'API calls made till now',
-                    type: 'number',
-                    required: false,
-                    sectionId: 'license-data',
-                    value: license.apiCallCounter,
-                    dependsOn: {
-                        id: 'type',
-                        targetValues: [LICENSE_TYPE.NO_OF_API_CALLS, LICENSE_TYPE.TIME_BOUND_AND_API_CALLS],
-                    },
-                    disabled: true,
-                    send: false,
-                },
                 expiresAt: {
                     name: 'License valid until (mm/dd/yyyy)',
                     type: 'text',
                     required: false,
-                    sectionId: 'license-data',
+                    sectionId: 'license-config',
                     value: license.expiresAt ? new Date(license.expiresAt).toString() : '',
                     dependsOn: {
                         id: 'type',
@@ -236,7 +225,7 @@ export const ViewLicense: FunctionComponent = props => {
                     name: 'Sync Strategy',
                     type: 'select',
                     required: true,
-                    sectionId: 'license-data',
+                    sectionId: 'license-config',
                     options: [
                         {
                             id: SYNC_STRATEGY.HTTP,
@@ -255,7 +244,7 @@ export const ViewLicense: FunctionComponent = props => {
                     name: 'Sync Trigger',
                     type: 'select',
                     required: true,
-                    sectionId: 'license-data',
+                    sectionId: 'license-config',
                     options: [
                         {
                             id: SYNC_TRIGGER.AFTER_INTERVAL,
@@ -274,18 +263,90 @@ export const ViewLicense: FunctionComponent = props => {
                     name: 'Sync Interval (seconds)',
                     type: 'number',
                     required: false,
-                    sectionId: 'license-data',
+                    sectionId: 'license-config',
                     value: license.syncInterval,
                     dependsOn: {
                         id: 'syncTrigger',
                         targetValues: [SYNC_TRIGGER.AFTER_INTERVAL],
                     },
                 },
+                maxSyncRetries: {
+                    name: 'Max retries',
+                    type: 'number',
+                    required: false,
+                    sectionId: 'license-config',
+                    value: license.maxSyncRetries,
+                    dependsOn: {
+                        id: 'syncTrigger',
+                        targetValues: [SYNC_TRIGGER.AFTER_INTERVAL],
+                    },
+                },
+                apiCallCounter: {
+                    name: 'API calls made till now',
+                    type: 'number',
+                    required: false,
+                    sectionId: 'license-stats',
+                    value: license.apiCallCounter,
+                    dependsOn: {
+                        id: 'type',
+                        targetValues: [LICENSE_TYPE.NO_OF_API_CALLS, LICENSE_TYPE.TIME_BOUND_AND_API_CALLS],
+                    },
+                    disabled: true,
+                    send: false,
+                },
+                activationCounter: {
+                    name: 'Current total activations in sync interval',
+                    type: 'number',
+                    required: false,
+                    sectionId: 'license-stats',
+                    value: license.activationCounter,
+                    dependsOn: {
+                        id: 'syncTrigger',
+                        targetValues: [SYNC_TRIGGER.AFTER_INTERVAL],
+                    },
+                    disabled: true,
+                    send: false,
+                },
+                activationResetDate: {
+                    name: 'Date for reset of activation counter',
+                    type: 'text',
+                    required: false,
+                    sectionId: 'license-stats',
+                    value: new Date(activationResetDate(license.activationResetDate, license.syncInterval)).toString(),
+                    dependsOn: {
+                        id: 'syncTrigger',
+                        targetValues: [SYNC_TRIGGER.AFTER_INTERVAL],
+                    },
+                    disabled: true,
+                    send: false,
+                },
+                lastActivation: {
+                    name: 'Last activation timestamp',
+                    type: 'text',
+                    required: false,
+                    sectionId: 'license-stats',
+                    value: new Date(license.lastActivation).toString(),
+                    dependsOn: {
+                        id: 'syncTrigger',
+                        targetValues: [SYNC_TRIGGER.AFTER_INTERVAL],
+                    },
+                    disabled: true,
+                    send: false,
+                },
+                lastSync: {
+                    name: 'Last sync time',
+                    type: 'text',
+                    required: false,
+                    sectionId: 'license-stats',
+                    value: new Date(license.lastSync).toString(),
+                    disabled: true,
+                    send: false,
+                },
                 createdAt: {
                     name: 'Created At',
                     type: 'text',
                     required: true,
-                    sectionId: 'license-data',
+                    sectionId: 'license-timestamp',
                     value: new Date(license.createdAt).toString(),
                     disabled: true,
                     send: false,
@@ -294,7 +355,7 @@ export const ViewLicense: FunctionComponent = props => {
                     name: 'Updated At',
                     type: 'text',
                     required: true,
-                    sectionId: 'license-data',
+                    sectionId: 'license-timestamp',
                     value: new Date(license.updatedAt).toString(),
                     disabled: true,
                     send: false,
