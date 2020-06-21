@@ -44,6 +44,7 @@ export interface LicenseResponse {
     metadata: any;
     type: LICENSE_TYPE;
     activationDelay: number;
+    activationCounterLimit: number;
     syncInterval: number;
     syncTrigger: SYNC_TRIGGER;
     syncStrategy: SYNC_STRATEGY;
@@ -198,6 +199,13 @@ export const ViewLicense: FunctionComponent = props => {
                     required: true,
                     sectionId: 'license-config',
                     value: license.activationDelay,
+                },
+                activationCounterLimit: {
+                    name: 'Activation Counter Limit',
+                    type: 'number',
+                    required: true,
+                    sectionId: 'license-config',
+                    value: license.activationCounterLimit,
                 },
                 allowedApiCalls: {
                     name: 'API call limit',
