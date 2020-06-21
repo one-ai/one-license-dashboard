@@ -74,6 +74,13 @@ export const AddLicense: FunctionComponent = props => {
                 sectionId: 'license-config',
                 value: 0,
             },
+            activationCounterLimit: {
+                name: 'Activation Counter Limit',
+                type: 'number',
+                required: true,
+                sectionId: 'license-config',
+                value: 0,
+            },
             allowedApiCalls: {
                 name: 'API call limit',
                 type: 'number',
